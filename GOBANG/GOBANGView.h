@@ -48,6 +48,7 @@ public:
 	void SetBackground(CDC* pDC, CRect rect);
 	void DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, int& cbRight, int& cbBottom, int& cbWeight, int& perWeight);
 	bool DrawChessman(CDC* pDC, int posX, int posY, int weight, int color);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // GOBANGView.cpp 中的调试版本

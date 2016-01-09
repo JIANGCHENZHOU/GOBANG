@@ -24,6 +24,7 @@ IMPLEMENT_DYNCREATE(CGOBANGView, CView)
 BEGIN_MESSAGE_MAP(CGOBANGView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CGOBANGView 构造/析构
@@ -111,7 +112,8 @@ void CGOBANGView::ShowChessboard(CDC* pDC)
 	DrawChessLine(pDC, rect, cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight);//画棋盘线
 	DrawCBEllipse(pDC, cbLeft, cbTop, perWeight);//画实心圆
 
-	DrawChessman(pDC, cbLeft*4, cbTop*2, perWeight,1);
+	DrawChessman(pDC, cbLeft, cbTop, perWeight/2,1);
+	DrawChessman(pDC, cbLeft+perWeight, cbTop, perWeight / 2, 0);
 }
 
 
@@ -124,23 +126,24 @@ void CGOBANGView::DrawCBEllipse(CDC* pDC ,int cbLeft, int cbTop ,int perWeight)
 
 	int x = cbLeft + perWeight * 3;
 	int y = cbTop + perWeight * 3;
-	pDC->Ellipse(x - 5, y - 5, x + 5, y + 5);
+	int w = perWeight/5;
+	pDC->Ellipse(x - w, y - w, x + w, y + w);
 
 	x = cbLeft + perWeight * 11;
 	y = cbTop + perWeight * 11;
-	pDC->Ellipse(x - 5, y - 5, x + 5, y + 5);
+	pDC->Ellipse(x - w, y - w, x + w, y + w);
 
 	x = cbLeft + perWeight * 11;
 	y = cbTop + perWeight * 3;
-	pDC->Ellipse(x - 5, y - 5, x + 5, y + 5);
+	pDC->Ellipse(x - w, y - w, x + w, y + w);
 
 	x = cbLeft + perWeight * 3;
 	y = cbTop + perWeight * 11;
-	pDC->Ellipse(x - 5, y - 5, x + 5, y + 5);
+	pDC->Ellipse(x - w, y - w, x + w, y + w);
 
 	x = cbLeft + perWeight * 7;
 	y = cbTop + perWeight * 7;
-	pDC->Ellipse(x - 5, y - 5, x + 5, y + 5);
+	pDC->Ellipse(x - w, y - w, x + w, y + w);
 
 	pDC->SelectObject(oldBrush);//用回旧刷
 	myBrush.DeleteObject();
@@ -205,9 +208,28 @@ void CGOBANGView::DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, i
 bool CGOBANGView::DrawChessman(CDC* pDC, int posX, int posY, int weight, int color)
 {
 	CBrush myBrush;
-	myBrush.CreateSolidBrush(RGB(0, 0, 0));//设置实心画刷
+	if (color == 0)
+		myBrush.CreateSolidBrush(RGB(0, 0, 0));//设置实心画刷
+	else
+		myBrush.CreateSolidBrush(RGB(255,255, 255));
 	CBrush *oldBrush = pDC->SelectObject(&myBrush);
 
 	pDC->Ellipse(posX - weight, posY - weight, posX + weight, posY + weight);
+	pDC->SelectObject(oldBrush);
+	myBrush.DeleteObject();
 	return true;
+}
+
+
+void CGOBANGView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+
+	CPoint point;
+	CRect rect;
+	int x, y;
+	GetCursorPos(&point);
+	GetClientRect(&rect);
+
+	point.x
 }
