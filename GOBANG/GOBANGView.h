@@ -1,0 +1,57 @@
+
+// GOBANGView.h : CGOBANGView 类的接口
+//
+
+#pragma once
+
+
+class CGOBANGView : public CView
+{
+protected: // 仅从序列化创建
+	CGOBANGView();
+	DECLARE_DYNCREATE(CGOBANGView)
+
+// 特性
+public:
+	CGOBANGDoc* GetDocument() const;
+
+// 操作
+public:
+
+// 重写
+public:
+	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+protected:
+
+// 实现
+public:
+	virtual ~CGOBANGView();
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+
+protected:
+
+// 生成的消息映射函数
+protected:
+	afx_msg void OnFilePrintPreview();
+	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	DECLARE_MESSAGE_MAP()
+public:
+	void ShowChessboard(CDC* pDC);
+	// 画棋盘实心圆
+	void DrawCBEllipse(CDC* pDC, int cbLeft, int cbTop, int perWeight);
+	// 设置背景
+	void SetBackground(CDC* pDC, CRect rect);
+	void DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, int& cbRight, int& cbBottom, int& cbWeight, int& perWeight);
+	bool DrawChessman(CDC* pDC, int posX, int posY, int weight, int color);
+};
+
+#ifndef _DEBUG  // GOBANGView.cpp 中的调试版本
+inline CGOBANGDoc* CGOBANGView::GetDocument() const
+   { return reinterpret_cast<CGOBANGDoc*>(m_pDocument); }
+#endif
+
