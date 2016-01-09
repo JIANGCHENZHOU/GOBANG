@@ -46,8 +46,8 @@ bool Chess::PoPChess(int& xy, int& player)
 	int i = xy / 10;
 	int j = xy % 10;
 
+	player = map[i][j];
 	map[i][j] = -1;
-
 
 	return true;
 }
