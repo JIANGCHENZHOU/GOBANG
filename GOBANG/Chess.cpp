@@ -118,3 +118,21 @@ int Chess::GetCbBottom()
 {
 	return cbBottom;
 }
+
+
+void Chess::ChangeMap(int x, int y, int player)
+{
+	map[x][y] = player;
+}
+
+
+int Chess::GetChessMap(int x, int y)
+{
+	return map[x][y];
+}
+
+
+void Chess::SetRect(CRect rect)
+{
+	this->rect = rect;
+}

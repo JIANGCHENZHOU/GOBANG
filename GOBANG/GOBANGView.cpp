@@ -35,7 +35,8 @@ CGOBANGView::CGOBANGView()
 	, eR(0)
 {
 	// TODO:  在此处添加构造代码;
-	
+	CRect rect = CRect(0, 0, 0, 0);
+	manager = Manager(rect);
 }
 
 CGOBANGView::~CGOBANGView()
@@ -63,8 +64,9 @@ void CGOBANGView::OnDraw(CDC* pDC)
 
 	if (drawStatus == 0)
 	{
-		DrawChessman(pDC, ePoint.x, ePoint.y, eR,1);
+		DrawChessman(pDC, ePoint.x, ePoint.y, eR,manager.GetPlayer());
 		drawStatus = -1;
+		manager.ChangePlayer();
 	}
 	
 
@@ -112,22 +114,22 @@ CGOBANGDoc* CGOBANGView::GetDocument() const // 非调试版本是内联的
 void CGOBANGView::ShowChessboard(CDC* pDC)
 {
 	CRect rect;
-	int cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight;
 	GetClientRect(&rect);
-	manager = Manager(rect);
+	int cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight;
+	manager.SetRect(rect);
 
 	cbLeft = cbTop = cbRight = cbBottom = cbWeight = perWeight = 0;
 
 	SetBackground(pDC,rect);//设置背景
 	DrawChessLine(pDC, rect, cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight);//画棋盘线
-	DrawCBEllipse(pDC, cbLeft, cbTop, perWeight);//画实心圆
+	DrawCBEllipse(pDC, cbLeft, cbTop, perWeight);
 
-	DrawChessman(pDC, cbLeft, cbTop, perWeight/2,1);
-	DrawChessman(pDC, cbLeft+perWeight, cbTop, perWeight / 2, 0);
+	//DrawChessman(pDC, cbLeft, cbTop, perWeight/2,1);
+	//DrawChessman(pDC, cbLeft+perWeight, cbTop, perWeight / 2, 0);
 }
 
 
-// 画棋盘实心圆
+// 画棋盘实心黑圆
 void CGOBANGView::DrawCBEllipse(CDC* pDC ,int cbLeft, int cbTop ,int perWeight)
 {
 	CBrush myBrush;
@@ -202,7 +204,7 @@ void CGOBANGView::DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, i
 }
 
 
-bool CGOBANGView::DrawChessman(CDC* pDC, int posX, int posY, int weight, int color)
+void CGOBANGView::DrawChessman(CDC* pDC, int posX, int posY, int weight, int color)
 {
 	CBrush myBrush;
 	if (color == 0)
@@ -214,7 +216,6 @@ bool CGOBANGView::DrawChessman(CDC* pDC, int posX, int posY, int weight, int col
 	pDC->Ellipse(posX - weight, posY - weight, posX + weight, posY + weight);
 	pDC->SelectObject(oldBrush);
 	myBrush.DeleteObject();
-	return true;
 }
 
 
@@ -232,7 +233,7 @@ void CGOBANGView::OnLButtonDown(UINT nFlags, CPoint point)
 	
 	ellipse = manager.GetPos(point.x, point.y);
 	
-	if (ellipse.EqualRect(CRect(0,0,0,0)))
+	if (ellipse.EqualRect(CRect(0,0,0,0)))//无效操作
 		return;
 	ePoint.y = ellipse.top + perWeight/2;
 	ePoint.x = ellipse.left + perWeight/2;

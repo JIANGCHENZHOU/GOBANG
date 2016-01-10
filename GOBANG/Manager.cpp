@@ -30,9 +30,16 @@ CRect Manager::GetPos(double mouseX, double mouseY)
 
 	if (numX == -1)
 		return CRect(0, 0, 0, 0);
+
+	if (chess.GetChessMap(numX,numY) != -1)//有棋子
+		return CRect(0, 0, 0, 0);
 	
 	int x = chess.GetCbLeft() + (numY - 1)*chess.GetPerWeight();
 	int y = chess.GetCbTop() + (numX - 1)*chess.GetPerWeight();
+
+	//保存棋子，棋子压入栈
+	chess.PushChess(numX * 10 + numY, player);
+	chess.ChangeMap(numX, numY, player);
 
 	return CRect(x - chess.GetPerWeight() / 2, y - chess.GetPerWeight() / 2,
 		x + chess.GetPerWeight() / 2, y + chess.GetPerWeight() / 2);
@@ -73,6 +80,8 @@ int Manager::GetNum(double mouseNum, int condition)
 
 void Manager::SetRect(CRect rect)
 {
+	chess.SetRect(rect);
+	chess.SetParameter();
 	rect = this->rect;
 }
 
@@ -80,4 +89,23 @@ void Manager::SetRect(CRect rect)
 Chess Manager::GetChess()
 {
 	return chess;
+}
+
+
+void Manager::ChangePlayer()
+{
+	if (player == 0)
+	{
+		player = 1;
+	}
+	else if (player == 1)
+	{
+		player = 0;
+	}
+}
+
+
+int Manager::GetPlayer()
+{
+	return player;
 }

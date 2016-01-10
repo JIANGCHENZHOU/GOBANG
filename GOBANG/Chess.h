@@ -25,5 +25,8 @@ public:
 	int GetPerWeight();
 	int GetCbTop();
 	int GetCbBottom();
+	void ChangeMap(int x, int y, int player);
+	int GetChessMap(int x, int y);
+	void SetRect(CRect rect);
 };
 

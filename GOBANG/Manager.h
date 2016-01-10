@@ -18,5 +18,7 @@ public:
 	int GetNum(double mouseNum, int condition);//condition  0为行 1为列
 	void SetRect(CRect rect);
 	Chess GetChess();
+	void ChangePlayer();
+	int GetPlayer();
 };
 

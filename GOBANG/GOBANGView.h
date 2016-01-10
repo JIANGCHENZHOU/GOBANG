@@ -45,11 +45,11 @@ protected:
 public:
 	void ShowChessboard(CDC* pDC);
 	// 画棋盘实心圆
-	void DrawCBEllipse(CDC* pDC, int cbLeft, int cbTop, int perWeight);
+	void DrawCBEllipse(CDC* pDC, int cbLeft, int cbTop, int perWeight);//画棋盘上的实心黑圆
 	// 设置背景
 	void SetBackground(CDC* pDC, CRect rect);
-	void DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, int& cbRight, int& cbBottom, int& cbWeight, int& perWeight);
-	bool DrawChessman(CDC* pDC, int posX, int posY, int weight, int color);
+	void DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, int& cbRight, int& cbBottom, int& cbWeight, int& perWeight);//画棋盘线函数
+	void DrawChessman(CDC* pDC, int posX, int posY, int weight, int color);//画棋函数
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 private:
 	Manager manager;
