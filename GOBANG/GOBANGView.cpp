@@ -30,9 +30,12 @@ END_MESSAGE_MAP()
 // CGOBANGView 构造/析构
 
 CGOBANGView::CGOBANGView()
+	: drawStatus(-1)
+	, ePoint(0)
+	, eR(0)
 {
-	// TODO:  在此处添加构造代码
-
+	// TODO:  在此处添加构造代码;
+	
 }
 
 CGOBANGView::~CGOBANGView()
@@ -58,6 +61,11 @@ void CGOBANGView::OnDraw(CDC* pDC)
 
 	ShowChessboard(pDC);
 
+	if (drawStatus == 0)
+	{
+		DrawChessman(pDC, ePoint.x, ePoint.y, eR,1);
+		drawStatus = -1;
+	}
 	
 
 	// TODO:  在此处为本机数据添加绘制代码
@@ -106,6 +114,8 @@ void CGOBANGView::ShowChessboard(CDC* pDC)
 	CRect rect;
 	int cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight;
 	GetClientRect(&rect);
+	manager = Manager(rect);
+
 	cbLeft = cbTop = cbRight = cbBottom = cbWeight = perWeight = 0;
 
 	SetBackground(pDC,rect);//设置背景
@@ -172,28 +182,15 @@ void CGOBANGView::SetBackground(CDC* pDC ,CRect rect)
 
 void CGOBANGView::DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, int& cbRight, int& cbBottom, int& cbWeight, int& perWeight)
 {
-	cbLeft = cbTop = 50;
-
-	//棋盘线
-	int wh = rect.right - cbLeft - 50;
-	int hh = rect.bottom - cbTop - 50;
-
-	if (wh < hh)
-	{
-		cbWeight = wh;
-		cbTop = (rect.bottom - rect.top) / 2 - cbWeight / 2;
-	}
-	else
-	{
-		cbWeight = hh;
-		cbLeft = (rect.right - rect.left) / 2 - cbWeight / 2;
-	}
-
-	perWeight = cbWeight / 14;
-	cbWeight = 14 * perWeight;//整数化
-
-	cbRight = cbLeft + cbWeight;
-	cbBottom = cbTop + cbWeight;
+	Chess chess;
+	//GetParameter(rect, cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight);
+	//manager.SetRect(rect);
+	chess = manager.GetChess();
+	cbLeft = chess.GetCbLeft();
+	cbRight = chess.GetCbRight();
+	cbTop = chess.GetCbTop();
+	cbBottom = chess.GetCbBottom();
+	perWeight = chess.GetPerWeight();
 
 	for (int i = 0; i < 15; i++)
 	{
@@ -225,11 +222,21 @@ void CGOBANGView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
 
-	CPoint point;
 	CRect rect;
-	int x, y;
-	GetCursorPos(&point);
-	GetClientRect(&rect);
+	CRect ellipse;
+	int perWeight;
 
-	point.x
+	GetClientRect(&rect);
+	manager.SetRect(rect);
+	perWeight = manager.GetChess().GetPerWeight();
+	
+	ellipse = manager.GetPos(point.x, point.y);
+	
+	if (ellipse.EqualRect(CRect(0,0,0,0)))
+		return;
+	ePoint.y = ellipse.top + perWeight/2;
+	ePoint.x = ellipse.left + perWeight/2;
+	eR = perWeight/2;
+	drawStatus = 0;
+	InvalidateRect(ellipse,FALSE);
 }

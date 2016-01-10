@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include "Manager.h"
+#include "atltypes.h"
 
 
 class CGOBANGView : public CView
@@ -49,6 +51,12 @@ public:
 	void DrawChessLine(CDC* pDC, CRect rect, int& cbLeft, int& cbTop, int& cbRight, int& cbBottom, int& cbWeight, int& perWeight);
 	bool DrawChessman(CDC* pDC, int posX, int posY, int weight, int color);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+private:
+	Manager manager;
+	int drawStatus;
+	// 圆参数
+	CPoint ePoint;
+	int eR;
 };
 
 #ifndef _DEBUG  // GOBANGView.cpp 中的调试版本
