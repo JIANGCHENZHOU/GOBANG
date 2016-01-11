@@ -61,6 +61,8 @@ void CGOBANGView::OnDraw(CDC* pDC)
 		return;
 
 	CRect rect;
+	int gameStatus = manager.GetGameStatus();
+
 	GetClientRect(&rect);
 	manager.SetRect(rect);
 
@@ -73,18 +75,30 @@ void CGOBANGView::OnDraw(CDC* pDC)
 	{
 		int length = manager.GetChess().GetTopStack() + 1;
 		int x, y, player;
-		while (manager.GetChessman(manager.GetChess().GetChessStack(), length, x, y, player))
-			DrawChessman(pDC, (y-1)*w + l, (x-1)*w + t, w/2, player);
+			while (manager.GetChessman(manager.GetChess().GetChessStack(), length, x, y, player))
+			DrawChessman(pDC, y*w + l, x*w + t, w/2, player);
 	}
 
-	if (drawStatus == 0)
+	if (drawStatus == 0)//下棋绘制
 	{
 		DrawChessman(pDC, ePoint.x, ePoint.y, eR,manager.GetPlayer());
-		drawStatus = -1;
+		drawStatus = 2;
+		if (manager.CheckStatus(0) == 0 || manager.CheckStatus(0) == 1)
+			Invalidate();
 		manager.ChangePlayer();
 	}
 	
-
+	if (gameStatus == 0 || gameStatus== 1)
+	{
+		CString str;
+		if (gameStatus == 0)
+			str = _T("黑棋胜");
+		else
+		{
+			str = _T("白棋胜");
+		}
+		pDC->TextOutW(50, 50, str);
+	}
 	// TODO:  在此处为本机数据添加绘制代码
 }
 
@@ -125,7 +139,7 @@ CGOBANGDoc* CGOBANGView::GetDocument() const // 非调试版本是内联的
 
 // CGOBANGView 消息处理程序
 
-
+//显示棋盘
 void CGOBANGView::ShowChessboard(CDC* pDC, CRect rect)
 {
 	int cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight;
@@ -231,22 +245,24 @@ void CGOBANGView::DrawChessman(CDC* pDC, int posX, int posY, int weight, int col
 void CGOBANGView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	if (manager.GetGameStatus() == 2)
+	{
+		CRect rect;
+		CRect ellipse;
+		int perWeight;
 
-	CRect rect;
-	CRect ellipse;
-	int perWeight;
+		GetClientRect(&rect);
+		manager.SetRect(rect);
+		perWeight = manager.GetChess().GetPerWeight();
 
-	GetClientRect(&rect);
-	manager.SetRect(rect);
-	perWeight = manager.GetChess().GetPerWeight();
-	
-	ellipse = manager.GetPos(point.x, point.y);
-	
-	if (ellipse.EqualRect(CRect(0,0,0,0)))//无效操作
-		return;
-	ePoint.y = ellipse.top + perWeight/2;
-	ePoint.x = ellipse.left + perWeight/2;
-	eR = perWeight/2;
-	drawStatus = 0;
-	InvalidateRect(ellipse,FALSE);
+		ellipse = manager.GetPos(point.x, point.y);
+
+		if (ellipse.EqualRect(CRect(0, 0, 0, 0)))//无效操作
+			return;
+		ePoint.y = ellipse.top + perWeight / 2;
+		ePoint.x = ellipse.left + perWeight / 2;
+		eR = perWeight / 2;
+		drawStatus = 0;
+		InvalidateRect(ellipse, FALSE);
+	}
 }

@@ -27,11 +27,11 @@ Chess::~Chess()
 
 
 // 十位数为i，个位数为j
-bool Chess::PushChess(int xy ,int player)
+bool Chess::PushChess(CPoint xy ,int player)
 {
 	//map的行列号
-	int i = xy / 10;
-	int j = xy % 10;
+	int i = xy.x - 1;
+	int j = xy.y - 1;
 
 	if (topStack>254 && map[i][j] != -1)
 		return false;
@@ -43,14 +43,14 @@ bool Chess::PushChess(int xy ,int player)
 }
 
 
-bool Chess::PoPChess(int& xy, int& player)
+bool Chess::PoPChess(CPoint& xy, int& player)
 {
 	if (topStack < 0)
 		return false;
 	xy = chessStack[topStack--];
 	
-	int i = xy / 10;
-	int j = xy % 10;
+	int i = xy.x - 1;
+	int j = xy.y - 1;
 
 	player = map[i][j];
 	map[i][j] = -1;
@@ -122,11 +122,11 @@ int Chess::GetCbBottom()
 
 void Chess::ChangeMap(int x, int y, int player)
 {
-	map[x][y] = player;
+	map[x - 1][y - 1] = player;
 }
 
 
-int Chess::GetChessMap(int x, int y)
+int Chess::GetChessMapPlayer(int x, int y)
 {
 	return map[x][y];
 }
@@ -154,7 +154,12 @@ int Chess::GetTopStack()
 	return topStack;
 }
 
-int* Chess::GetChessStack()
+CPoint* Chess::GetChessStack()
 {
 	return chessStack;
+}
+
+CPoint Chess::GetStackOfTopElem()
+{
+	return chessStack[topStack];
 }

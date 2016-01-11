@@ -8,7 +8,7 @@ Manager::Manager()
 Manager::Manager(CRect rect)
 {
 	this->rect = rect;
-	gameStatus = -1;
+	gameStatus = 2;
 	player = 0;
 	chess = Chess(rect);
 }
@@ -31,14 +31,15 @@ CRect Manager::GetPos(double mouseX, double mouseY)
 	if (numX == -1)
 		return CRect(0, 0, 0, 0);
 
-	if (chess.GetChessMap(numX,numY) != -1)//有棋子
+	if (chess.GetChessMapPlayer(numX - 1,numY - 1) != -1)//有棋子
 		return CRect(0, 0, 0, 0);
 	
 	int x = chess.GetCbLeft() + (numY - 1)*chess.GetPerWeight();
 	int y = chess.GetCbTop() + (numX - 1)*chess.GetPerWeight();
 
 	//保存棋子，棋子压入栈
-	chess.PushChess(numX * 10 + numY, player);
+	CPoint xy = CPoint(numX, numY);
+	chess.PushChess(xy, player);
 	chess.ChangeMap(numX, numY, player);
 	
 
@@ -83,7 +84,7 @@ void Manager::SetRect(CRect rect)
 {
 	chess.SetRect(rect);
 	chess.SetParameter();
-	rect = this->rect;
+	this->rect = rect;
 }
 
 
@@ -113,18 +114,104 @@ int Manager::GetPlayer()
 
 
 // 获取已下过的棋子
-bool Manager::GetChessman(int cmAssemble[225], int& length, int& x, int& y, int& player)
+bool Manager::GetChessman(CPoint cmAssemble[225], int& length, int& x, int& y, int& player)
 {
-	int xy;
+	CPoint xy;
 	if (length == 0)
 		return false;
 	else
 	{
 		xy = cmAssemble[length - 1];
-		x = xy / 10;
-		y = xy % 10;
-		player = chess.GetChessMap(x, y);
+		x = xy.x - 1;
+		y = xy.y - 1;
+		player = chess.GetChessMapPlayer(x, y);
 		length--;
 	}
 	return true;
 }
+
+
+int Manager::CheckStatus(int k)
+{
+	if (k == 0)
+		if (IsEnd())
+		{
+			gameStatus = player;
+			return player;//决出胜负
+		}
+
+	return 2;
+}
+
+bool Manager::IsEnd()
+{
+	CPoint xy = chess.GetStackOfTopElem();
+	int x = xy.x;
+	int y = xy.y;
+	int num = 0;
+	bool b1 = true;
+	bool b2 = true;
+	for (int i = 1; i < 5; i++)//横线
+	{
+		if (chess.GetChessMapPlayer(x + i - 1, y - 1) == player && b1)
+			num++;
+		else
+			b1 = false;
+		if (chess.GetChessMapPlayer(x - i - 1, y - 1) == player&&b2&& x - i > 0)
+			num++;
+		else
+			b2 = false;
+		if (!b1&&!b2) break;
+		if (num >= 4) return true;
+	}
+	
+	for (int i = 1, num = 0, b1 = true, b2 = true; i < 5; i++)//竖线
+	{
+		if (chess.GetChessMapPlayer(x - 1, y + i - 1) == player&&b1)
+			num++;
+		else
+			b1 = false;
+		if (chess.GetChessMapPlayer(x - 1, y - i - 1) == player && b2 && y - i > 0)
+			num++;
+		else
+			b2 = false;
+		if (!b1&&!b2) break;
+		if (num >= 4) return true;
+	}
+
+	for (int i = 1, num = 0, b1 = true, b2 = true; i < 5; i++)//主斜对角线
+	{
+		if (chess.GetChessMapPlayer(x + i - 1, y + i - 1) == player&&b1)
+			num++;
+		else
+			b1 = false;
+		if (chess.GetChessMapPlayer(x - i - 1, y - i - 1) == player && b2 && x-i>0 && y-i>0)
+			num++;
+		else
+			b2 = false;
+		if (!b1&&!b2) break;
+		if (num >= 4) return true;
+	}
+
+	for (int i = 1, num = 0, b1 = true, b2 = true; i < 5; i++)//副斜对角线
+	{
+		if (chess.GetChessMapPlayer(x - i - 1, y + i - 1) == player&&b1 && x - i > 0)
+			num++;
+		else
+			b1 = false;
+		if (chess.GetChessMapPlayer(x + i - 1, y - i - 1) == player && b2 && y - i>0)
+			num++;
+		else
+			b2 = false;
+		if (!b1&&!b2) break;
+		if (num >= 4) return true;
+	}
+	return false;
+}
+
+
+int Manager::GetGameStatus()
+{
+	return gameStatus;
+}
+

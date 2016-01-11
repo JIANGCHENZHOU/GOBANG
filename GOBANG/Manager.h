@@ -8,7 +8,7 @@ public:
 	Manager();
 	~Manager();
 private:
-	int gameStatus;//-1为未开始 0为开始;1为失败 2为胜利 
+	int gameStatus;//-1为未开始 2为开始;0为黑棋胜利 1为白棋胜利 
 	int player;//0为黑棋，1为白棋
 
 	CRect rect;
@@ -21,6 +21,10 @@ public:
 	void ChangePlayer();
 	int GetPlayer();
 	// 获取已下过的棋子
-	bool GetChessman(int cmAssemble[225], int& length, int& x, int& y, int& player);
+	bool GetChessman(CPoint cmAssemble[225], int& length, int& x, int& y, int& player);
+	int CheckStatus(int k);//k=0 检查落子是否能判定输赢
+	int GetStackOfTopElem();
+	bool IsEnd();
+	int GetGameStatus();
 };
 
