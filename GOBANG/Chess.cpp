@@ -36,7 +36,7 @@ bool Chess::PushChess(int xy ,int player)
 	if (topStack>254 && map[i][j] != -1)
 		return false;
 	//ѹջ
-	chessStack[topStack++] = xy;
+	chessStack[++topStack] = xy;
 
 	map[i][j] = player;
 	return true;
@@ -135,4 +135,26 @@ int Chess::GetChessMap(int x, int y)
 void Chess::SetRect(CRect rect)
 {
 	this->rect = rect;
+}
+
+
+bool Chess::IsStackEmpty()
+{
+	if (topStack == -1)
+		return true;
+	else
+	{
+		return false;
+	}
+}
+
+
+int Chess::GetTopStack()
+{
+	return topStack;
+}
+
+int* Chess::GetChessStack()
+{
+	return chessStack;
 }

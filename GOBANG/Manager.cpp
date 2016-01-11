@@ -40,6 +40,7 @@ CRect Manager::GetPos(double mouseX, double mouseY)
 	//保存棋子，棋子压入栈
 	chess.PushChess(numX * 10 + numY, player);
 	chess.ChangeMap(numX, numY, player);
+	
 
 	return CRect(x - chess.GetPerWeight() / 2, y - chess.GetPerWeight() / 2,
 		x + chess.GetPerWeight() / 2, y + chess.GetPerWeight() / 2);
@@ -108,4 +109,22 @@ void Manager::ChangePlayer()
 int Manager::GetPlayer()
 {
 	return player;
+}
+
+
+// 获取已下过的棋子
+bool Manager::GetChessman(int cmAssemble[225], int& length, int& x, int& y, int& player)
+{
+	int xy;
+	if (length == 0)
+		return false;
+	else
+	{
+		xy = cmAssemble[length - 1];
+		x = xy / 10;
+		y = xy % 10;
+		player = chess.GetChessMap(x, y);
+		length--;
+	}
+	return true;
 }

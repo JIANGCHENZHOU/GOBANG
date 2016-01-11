@@ -43,7 +43,7 @@ protected:
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
 public:
-	void ShowChessboard(CDC* pDC);
+	void ShowChessboard(CDC* pDC, CRect rect);
 	// 画棋盘实心圆
 	void DrawCBEllipse(CDC* pDC, int cbLeft, int cbTop, int perWeight);//画棋盘上的实心黑圆
 	// 设置背景

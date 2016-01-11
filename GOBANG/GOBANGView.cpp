@@ -60,7 +60,22 @@ void CGOBANGView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	ShowChessboard(pDC);
+	CRect rect;
+	GetClientRect(&rect);
+	manager.SetRect(rect);
+
+	ShowChessboard(pDC, rect);
+	
+	int w = manager.GetChess().GetPerWeight();
+	int l = manager.GetChess().GetCbLeft();
+	int t = manager.GetChess().GetCbTop();
+	if (!manager.GetChess().IsStackEmpty())
+	{
+		int length = manager.GetChess().GetTopStack() + 1;
+		int x, y, player;
+		while (manager.GetChessman(manager.GetChess().GetChessStack(), length, x, y, player))
+			DrawChessman(pDC, (y-1)*w + l, (x-1)*w + t, w/2, player);
+	}
 
 	if (drawStatus == 0)
 	{
@@ -111,21 +126,15 @@ CGOBANGDoc* CGOBANGView::GetDocument() const // 非调试版本是内联的
 // CGOBANGView 消息处理程序
 
 
-void CGOBANGView::ShowChessboard(CDC* pDC)
+void CGOBANGView::ShowChessboard(CDC* pDC, CRect rect)
 {
-	CRect rect;
-	GetClientRect(&rect);
 	int cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight;
-	manager.SetRect(rect);
 
 	cbLeft = cbTop = cbRight = cbBottom = cbWeight = perWeight = 0;
 
 	SetBackground(pDC,rect);//设置背景
 	DrawChessLine(pDC, rect, cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight);//画棋盘线
 	DrawCBEllipse(pDC, cbLeft, cbTop, perWeight);
-
-	//DrawChessman(pDC, cbLeft, cbTop, perWeight/2,1);
-	//DrawChessman(pDC, cbLeft+perWeight, cbTop, perWeight / 2, 0);
 }
 
 

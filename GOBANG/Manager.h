@@ -20,5 +20,7 @@ public:
 	Chess GetChess();
 	void ChangePlayer();
 	int GetPlayer();
+	// 获取已下过的棋子
+	bool GetChessman(int cmAssemble[225], int& length, int& x, int& y, int& player);
 };
 
