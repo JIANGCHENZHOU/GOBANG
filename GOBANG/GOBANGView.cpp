@@ -338,8 +338,8 @@ BOOL CGOBANGView::OnCommand(WPARAM wParam, LPARAM lParam)
 void CGOBANGView::OnDoubleGame()
 {
 	// TODO:  在此添加命令处理程序代码
-	//manager.InitManager();//初始化
-	//user.InitUserInfo();
+	manager.InitManager();//初始化
+	user.InitUserInfo();
 	
 	DoubleUserDlg dlg;
 	dlg.DoModal();
