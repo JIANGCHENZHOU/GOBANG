@@ -70,6 +70,7 @@ protected:
 public:
 	void DrawUserInfo(CDC* pDC, CRect rect, int cbLeft);
 	void DrawScore(CDC* pDC, CRect rect, int cbTop);
+	void DrawCurrentPlayer(CDC* pDC, CRect rect);
 };
 
 #ifndef _DEBUG  // GOBANGView.cpp 中的调试版本

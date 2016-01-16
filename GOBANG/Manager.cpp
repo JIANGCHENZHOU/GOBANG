@@ -15,6 +15,7 @@ Manager::Manager(CRect rect)
 	gameStatus = -1;
 	player = 0;
 	chess = Chess(rect);
+	isP1First = true;
 }
 
 
@@ -278,6 +279,7 @@ void Manager::InitManager()
 	numOfWin1 = 0;
 	numOfWin2 = 0;
 	gameStatus = -1;
+	isP1First = true;
 }
 
 
@@ -292,4 +294,32 @@ void Manager::GetNumOfWin(int& player1, int& player2)
 {
 	player1 = numOfWin1;
 	player2 = numOfWin2;
+}
+
+void Manager::ShowCurrentPlayer(int& player, int& color)
+{
+	if(isP1First)
+		player = this->player;
+	else
+	{
+		if (this->player == 0)
+			player = 1;
+		else
+			player = 0;
+	}
+
+	color = this->player;
+
+}
+
+void Manager::ChangeFirstPlayer()
+{
+	if (isP1First)
+	{
+		isP1First = false;
+	}
+	else
+	{
+		isP1First = true;
+	}
 }

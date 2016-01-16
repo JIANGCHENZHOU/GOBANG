@@ -43,9 +43,12 @@ public:
 private:
 	int numOfWin1;//player1胜利次数
 	int numOfWin2;//player2胜利次数
+	bool isP1First;//player1是否执黑棋 
 public:
 	void InitManager();
 	void SetNumOfWin(int player1, int player2);
 	void GetNumOfWin(int& player1, int& player2);
+	void ShowCurrentPlayer(int& player, int& color);
+	void ChangeFirstPlayer();
 };
 

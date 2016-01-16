@@ -112,28 +112,42 @@ void CGOBANGView::OnDraw(CDC* pDC)
 		DrawScore(pDC, rect, t);
 		MessageBox(str);
 		dlg.DoModal();
+
+		int pos;
+		user.GetColorOfPlayer1() == gameStatus ? pos = 0 : pos = 1;
+		user.PlusScore(pos);
+		int* score = user.GetScore();
+		manager.SetNumOfWin(score[0], score[1]);
+
 		if (user.GetIsAgain())
 		{
 			user.SetIsAgain(false);
-			int pos;
-			user.GetColorOfPlayer1() == gameStatus ? pos = 0 : pos = 1;
-			user.PlusScore(pos);
-			int* score = user.GetScore();
-			manager.SetNumOfWin(score[0], score[1]);
 			user.ChangeColorOfPlayer1();
 			manager.EmptyChess();
 			manager.SetGameStatus(2);
 			DrawScore(pDC, rect, t);
+			manager.ChangeFirstPlayer();
 			Invalidate();
 		}
 		else
 		{
+			int win1, win2;
+			CString str;
+			manager.GetNumOfWin(win1,win2);
+			if (win1 > win2)
+				str = manager.GetPlayer1Name();
+			else
+				str = manager.GetPlayer2Name();
+			str.Format(L"%s胜", str);
+			MessageBox(str, L"恭喜", NULL);
 			user.InitUserInfo();
 			manager.InitManager();
 			Invalidate();
 		}
 	}
-	
+
+	if (gameStatus != -1)
+		DrawCurrentPlayer(pDC, rect);
 	
 		
 	
@@ -309,6 +323,9 @@ void CGOBANGView::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 		InvalidateRect(ellipse, FALSE);
+
+		CRect r(0, 0, manager.GetChess().GetCbLeft(), rect.bottom);
+		InvalidateRect(r,FALSE);
 	}
 }
 
@@ -382,8 +399,22 @@ void CGOBANGView::DrawScore(CDC* pDC,CRect rect,int cbTop)
 	CFont font;
 	int score[2];
 	manager.GetNumOfWin(score[0], score[1]);
-	str.Format(L"比分：%d : %d", score[0], score[1]);
-	font.CreatePointFont(cbTop * 5, L"宋体", NULL);
+	str.Format(L"%s  %d : %d  %s", manager.GetPlayer1Name(), score[0], score[1], manager.GetPlayer2Name());
+	font.CreatePointFont(cbTop * 5,  L"宋体", NULL);
 	pDC->SelectObject(&font);
 	pDC->DrawText(str, rect, DT_CENTER);//居中
+}
+
+void CGOBANGView::DrawCurrentPlayer(CDC* pDC, CRect rect)
+{
+	int height = rect.Height();
+	int player, color, i;
+	manager.ShowCurrentPlayer(player, color);
+	if (player == 0)
+		i = 3;
+	else
+		i = 7;
+	
+
+	DrawChessman(pDC, height / 17, height*i / 8 + height / 17, height / 17, color);
 }
