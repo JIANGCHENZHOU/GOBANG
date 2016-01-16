@@ -5,7 +5,10 @@
 #pragma once
 #include "Manager.h"
 #include "atltypes.h"
-
+#include "afxwin.h"
+#include "DoubleUserDlg.h"
+#include "AgainDlg.h"
+#include "UserInfo.h"
 
 class CGOBANGView : public CView
 {
@@ -57,6 +60,16 @@ private:
 	// 圆参数
 	CPoint ePoint;
 	int eR;
+	CMenu m_menu;
+public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnDoubleGame();
+	afx_msg void OnRegretChess();
+protected:
+public:
+	void DrawUserInfo(CDC* pDC, CRect rect, int cbLeft);
+	void DrawScore(CDC* pDC, CRect rect, int cbTop);
 };
 
 #ifndef _DEBUG  // GOBANGView.cpp 中的调试版本

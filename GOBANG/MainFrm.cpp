@@ -7,6 +7,7 @@
 
 #include "MainFrm.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -26,6 +27,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 	ON_WM_SETTINGCHANGE()
+//	ON_WM_SIZE()
+//	ON_WM_PAINT()
+ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -182,7 +186,6 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 		return FALSE;
 	// TODO:  在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
-
 	return TRUE;
 }
 
@@ -404,4 +407,22 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
 	m_wndOutput.UpdateFonts();
+}
+
+
+//void CMainFrame::OnSize(UINT nType, int cx, int cy)
+//{
+//	CFrameWndEx::OnSize(nType, cx, cy);
+//	TODO:  在此处添加消息处理程序代码
+//}
+
+
+
+
+void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	lpMMI->ptMinTrackSize.x = 588;
+	lpMMI->ptMinTrackSize.y = 588;
+	CFrameWndEx::OnGetMinMaxInfo(lpMMI);
 }

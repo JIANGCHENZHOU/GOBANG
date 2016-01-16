@@ -12,6 +12,7 @@
 #include "GOBANGDoc.h"
 #include "GOBANGView.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -25,6 +26,9 @@ BEGIN_MESSAGE_MAP(CGOBANGView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_CREATE()
+	ON_COMMAND(ID_DOUBLE_GAME, &CGOBANGView::OnDoubleGame)
+	ON_COMMAND(ID_REGRET_CHESS, &CGOBANGView::OnRegretChess)
 END_MESSAGE_MAP()
 
 // CGOBANGView 构造/析构
@@ -37,6 +41,7 @@ CGOBANGView::CGOBANGView()
 	// TODO:  在此处添加构造代码;
 	CRect rect = CRect(0, 0, 0, 0);
 	manager = Manager(rect);
+	m_menu.LoadMenuW(IDR_MAINFRAME);
 }
 
 CGOBANGView::~CGOBANGView()
@@ -88,17 +93,50 @@ void CGOBANGView::OnDraw(CDC* pDC)
 		manager.ChangePlayer();
 	}
 	
+	if (gameStatus == 2)
+		DrawScore(pDC, rect, t);
+
 	if (gameStatus == 0 || gameStatus== 1)
 	{
+		//CFont font;
+		//font.CreatePointFont(500, _T("宋体"), pDC);//创建字体，1000为字体大小可改为其他数字
+		//pDC->SelectObject(&font);
 		CString str;
+		AgainDlg dlg;
 		if (gameStatus == 0)
 			str = _T("黑棋胜");
 		else
 		{
 			str = _T("白棋胜");
 		}
-		pDC->TextOutW(50, 50, str);
+		DrawScore(pDC, rect, t);
+		MessageBox(str);
+		dlg.DoModal();
+		if (user.GetIsAgain())
+		{
+			user.SetIsAgain(false);
+			int pos;
+			user.GetColorOfPlayer1() == gameStatus ? pos = 0 : pos = 1;
+			user.PlusScore(pos);
+			int* score = user.GetScore();
+			manager.SetNumOfWin(score[0], score[1]);
+			user.ChangeColorOfPlayer1();
+			manager.EmptyChess();
+			manager.SetGameStatus(2);
+			DrawScore(pDC, rect, t);
+			Invalidate();
+		}
+		else
+		{
+			user.InitUserInfo();
+			manager.InitManager();
+			Invalidate();
+		}
 	}
+	
+	
+		
+	
 	// TODO:  在此处为本机数据添加绘制代码
 }
 
@@ -149,6 +187,7 @@ void CGOBANGView::ShowChessboard(CDC* pDC, CRect rect)
 	SetBackground(pDC,rect);//设置背景
 	DrawChessLine(pDC, rect, cbLeft, cbTop, cbRight, cbBottom, cbWeight, perWeight);//画棋盘线
 	DrawCBEllipse(pDC, cbLeft, cbTop, perWeight);
+	DrawUserInfo(pDC, rect, cbLeft);
 }
 
 
@@ -186,22 +225,25 @@ void CGOBANGView::DrawCBEllipse(CDC* pDC ,int cbLeft, int cbTop ,int perWeight)
 }
 
 // 设置背景
-void CGOBANGView::SetBackground(CDC* pDC ,CRect rect)
+void CGOBANGView::SetBackground(CDC* pDC, CRect rect)
 {
 	//设置棋盘背景
-	CDC ChessBoard;
-	CBitmap m_chessBoard;
-	HBITMAP hBitmap;
-
-	//hBmp = (HBITMAP)::LoadImage(NULL,"BG.bmp",IMAGE_BITMAP,0,0,LR_LOADFROMFILE);//具体位置
-	hBitmap = (HBITMAP)::LoadImage(::AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BITMAP1), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);//从资源文件中加载
-
-	m_chessBoard.Attach(hBitmap);
-
-	ChessBoard.CreateCompatibleDC(pDC);
-	ChessBoard.SelectObject(m_chessBoard);
-
-	pDC->BitBlt(0, 0, rect.right - rect.left, rect.bottom - rect.top, &ChessBoard, 0, 0, SRCCOPY);
+	//	CDC ChessBoard;
+	//	CBitmap m_chessBoard;
+	//	HBITMAP hBitmap;
+	//
+	//	//hBmp = (HBITMAP)::LoadImage(NULL,"BG.bmp",IMAGE_BITMAP,0,0,LR_LOADFROMFILE);//具体位置
+	//	hBitmap = (HBITMAP)::LoadImage(::AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BITMAP1), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);//从资源文件中加载
+	//
+	//	m_chessBoard.Attach(hBitmap);
+	//
+	//	ChessBoard.CreateCompatibleDC(pDC);
+	//	ChessBoard.SelectObject(m_chessBoard);
+	//
+	//	pDC->BitBlt(0, 0, rect.right - rect.left, rect.bottom - rect.top, &ChessBoard, 0, 0, SRCCOPY);
+	//
+	
+	pDC->FillSolidRect(rect, RGB(192, 192, 192));
 }
 
 
@@ -263,6 +305,85 @@ void CGOBANGView::OnLButtonDown(UINT nFlags, CPoint point)
 		ePoint.x = ellipse.left + perWeight / 2;
 		eR = perWeight / 2;
 		drawStatus = 0;
+
+
+
 		InvalidateRect(ellipse, FALSE);
 	}
+}
+
+int CGOBANGView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	
+	this->SetMenu(&m_menu);
+	if (CView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  在此添加您专用的创建代码
+	
+	return 0;
+}
+
+
+BOOL CGOBANGView::OnCommand(WPARAM wParam, LPARAM lParam)
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	//m_menu.LoadMenuW(IDR_MAINFRAME);
+	//this->SetMenu(&m_menu);
+
+	return CView::OnCommand(wParam, lParam);
+}
+
+
+void CGOBANGView::OnDoubleGame()
+{
+	// TODO:  在此添加命令处理程序代码
+	//manager.InitManager();//初始化
+	//user.InitUserInfo();
+	
+	DoubleUserDlg dlg;
+	dlg.DoModal();
+	manager.SetPlayer1(user.GetPlayer1());
+	manager.SetPlayer2(user.GetPlayer2());
+
+	manager.SetGameStatus(2);
+	Invalidate();
+}
+
+void CGOBANGView::OnRegretChess()
+{
+	// TODO:  在此添加命令处理程序代码
+	CPoint xy;
+	int player;
+	if (manager.PopChess(xy, player) && manager.GetGameStatus() == 2)
+	{
+		manager.ChangePlayer();
+		Invalidate();
+	}
+}
+
+void CGOBANGView::DrawUserInfo(CDC* pDC, CRect rect, int cbLeft)
+{
+	int heigth = rect.bottom - rect.top;
+	CFont font;
+	heigth /= 4;
+
+	font.CreatePointFont(cbLeft , L"宋体", NULL);
+	pDC->SelectObject(&font);
+
+	pDC->TextOutW(rect.left, heigth, manager.GetPlayer1Name());
+	pDC->TextOutW(rect.left, heigth*3, manager.GetPlayer2Name());
+}
+
+
+void CGOBANGView::DrawScore(CDC* pDC,CRect rect,int cbTop)
+{
+	CString str;
+	CFont font;
+	int score[2];
+	manager.GetNumOfWin(score[0], score[1]);
+	str.Format(L"比分：%d : %d", score[0], score[1]);
+	font.CreatePointFont(cbTop * 5, L"宋体", NULL);
+	pDC->SelectObject(&font);
+	pDC->DrawText(str, rect, DT_CENTER);//居中
 }

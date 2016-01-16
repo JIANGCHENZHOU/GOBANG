@@ -1,6 +1,8 @@
 #pragma once
 #include "Chess.h"
 #include "atltypes.h"
+
+
 class Manager
 {
 public:
@@ -11,8 +13,8 @@ private:
 	int gameStatus;//-1为未开始 2为开始;0为黑棋胜利 1为白棋胜利 
 	int player;//0为黑棋，1为白棋
 
-	CRect rect;
-	Chess chess;
+	CRect rect;//窗口大小
+	Chess chess;//棋子类
 public:
 	CRect GetPos(double mouseX, double mouseY);//确定覆盖范围
 	int GetNum(double mouseNum, int condition);//condition  0为行 1为列
@@ -26,5 +28,24 @@ public:
 	int GetStackOfTopElem();
 	bool IsEnd();
 	int GetGameStatus();
+	void SetGameStatus(int gameStatus);
+	void EmptyChess();
+	bool PopChess(CPoint& xy, int& player);
+	bool PushChess(CPoint& xy, int& player);
+private:
+	CString sPlayer1;
+	CString sPlayer2;
+public:
+	void SetPlayer1(CString sPlayer1);
+	void SetPlayer2(CString sPlayer2);
+	CString GetPlayer1Name();
+	CString GetPlayer2Name();
+private:
+	int numOfWin1;//player1胜利次数
+	int numOfWin2;//player2胜利次数
+public:
+	void InitManager();
+	void SetNumOfWin(int player1, int player2);
+	void GetNumOfWin(int& player1, int& player2);
 };
 

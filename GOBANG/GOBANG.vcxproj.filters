@@ -60,6 +60,15 @@
     <ClInclude Include="Chess.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DoubleUserDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AgainDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GOBANG.cpp">
@@ -96,6 +105,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Chess.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DoubleUserDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AgainDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -85,14 +85,30 @@
 #define IDS_EXPLORER                    305
 #define IDS_EDIT_MENU                   306
 #define IDB_BITMAP1                     311
+#define IDD_DOUBLEUSER                  312
+#define IDD_DIALOG1                     313
+#define IDD_AGAIN                       313
+#define IDC_STRPLAYER1                  1000
+#define IDC_STRPLAYER2                  1001
+#define ID_32771                        32771
+#define ID_32772                        32772
+#define ID_DOUBLE_GAME                  32773
+#define ID_32774                        32774
+#define ID_32775                        32775
+#define ID_32776                        32776
+#define ID_32777                        32777
+#define ID_32778                        32778
+#define ID_DRAW                         32779
+#define ID_REGRET                       32780
+#define ID_REGRET_CHESS                 32781
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        312
-#define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_RESOURCE_VALUE        314
+#define _APS_NEXT_COMMAND_VALUE         32782
+#define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

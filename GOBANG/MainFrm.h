@@ -8,6 +8,7 @@
 #include "OutputWnd.h"
 #include "PropertiesWnd.h"
 
+
 class CMainFrame : public CFrameWndEx
 {
 	
@@ -56,6 +57,10 @@ protected:
 
 	BOOL CreateDockingWindows();
 	void SetDockingWindowIcons(BOOL bHiColorIcons);
+public:
+//	afx_msg void OnSize(UINT nType, int cx, int cy);
+//	afx_msg void OnPaint();
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 };
 
 

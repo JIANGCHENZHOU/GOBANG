@@ -6,17 +6,11 @@ Chess::Chess()
 }
 
 Chess::Chess(CRect rect)
-	: topStack(0)
+	: topStack(-1)
 {
 	//初始化棋盘
-	for (int i = 0; i < 15; i++)
-		for (int j = 0; j < 15; j++)
-			map[i][j] = -1;
-	for (int i = 0; i < 225; i++)
-		chessStack[i] = -1;
-	topStack = -1;
 	this->rect = rect;
-
+	EmptyChess();
 	SetParameter();
 }
 
@@ -162,4 +156,16 @@ CPoint* Chess::GetChessStack()
 CPoint Chess::GetStackOfTopElem()
 {
 	return chessStack[topStack];
+}
+
+
+void Chess::EmptyChess()
+{
+	//初始化棋盘，初始化栈
+	for (int i = 0; i < 15; i++)
+		for (int j = 0; j < 15; j++)
+			map[i][j] = -1;
+	for (int i = 0; i < 225; i++)
+		chessStack[i] = -1;
+	topStack = -1;
 }

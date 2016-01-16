@@ -177,48 +177,19 @@ END
 
 IDR_MAINFRAME MENU
 BEGIN
-    POPUP "文件(&F)"
+    POPUP "功能(&F)"
     BEGIN
-        MENUITEM "新建(&N)\tCtrl+N",              ID_FILE_NEW
-        MENUITEM "打开(&O)...\tCtrl+O",           ID_FILE_OPEN
-        MENUITEM "保存(&S)\tCtrl+S",              ID_FILE_SAVE
-        MENUITEM "另存为(&A)...",                  ID_FILE_SAVE_AS
-        MENUITEM SEPARATOR
-        MENUITEM "最近的文件",                       ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM "准备（&R）",                      ID_32778
+        MENUITEM "悔棋（&Q）",                      ID_REGRET_CHESS
+        MENUITEM "求和（&D）",                      ID_DRAW
         MENUITEM SEPARATOR
         MENUITEM "退出(&X)",                      ID_APP_EXIT
     END
-    POPUP "编辑(&E)"
+    POPUP "模式（&M）"
     BEGIN
-        MENUITEM "撤消(&U)\tCtrl+Z",              ID_EDIT_UNDO
-        MENUITEM SEPARATOR
-        MENUITEM "剪切(&T)\tCtrl+X",              ID_EDIT_CUT
-        MENUITEM "复制(&C)\tCtrl+C",              ID_EDIT_COPY
-        MENUITEM "粘贴(&P)\tCtrl+V",              ID_EDIT_PASTE
-    END
-    POPUP "视图(&V)"
-    BEGIN
-        POPUP "工具栏和停靠窗口(&T)"
-        BEGIN
-            MENUITEM "<占位符>",                       ID_VIEW_TOOLBAR
-        END
-        MENUITEM "状态栏(&S)",                     ID_VIEW_STATUS_BAR
-        POPUP "应用程序外观(&A)"
-        BEGIN
-            MENUITEM "Windows 2000(&2)",            ID_VIEW_APPLOOK_WIN_2000
-            MENUITEM "Office XP(&X)",               ID_VIEW_APPLOOK_OFF_XP
-            MENUITEM "Windows XP(&W)",              ID_VIEW_APPLOOK_WIN_XP
-            MENUITEM "Office 2003(&3)",             ID_VIEW_APPLOOK_OFF_2003
-            MENUITEM "Visual Studio 200&5",         ID_VIEW_APPLOOK_VS_2005
-            MENUITEM "Visual Studio 200&8",         ID_VIEW_APPLOOK_VS_2008
-            POPUP "Office 2007(&7)"
-            BEGIN
-                MENUITEM "蓝色样式(&B)",                    ID_VIEW_APPLOOK_OFF_2007_BLUE
-                MENUITEM "黑色样式(&L)",                    ID_VIEW_APPLOOK_OFF_2007_BLACK
-                MENUITEM "银色样式(&S)",                    ID_VIEW_APPLOOK_OFF_2007_SILVER
-                MENUITEM "水绿色样式(&A)",                   ID_VIEW_APPLOOK_OFF_2007_AQUA
-            END
-        END
+        MENUITEM "人机对战（&E）",                    ID_32775
+        MENUITEM "双人游戏（&T）",                    ID_DOUBLE_GAME
+        MENUITEM "联机游戏（&I）",                    ID_32776
     END
     POPUP "帮助(&H)"
     BEGIN
@@ -329,6 +300,29 @@ BEGIN
     DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
 END
 
+IDD_DOUBLEUSER DIALOGEX 0, 0, 299, 122
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,53,95,50,14
+    PUSHBUTTON      "取消",IDCANCEL,185,95,50,14
+    EDITTEXT        IDC_STRPLAYER1,87,20,170,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_STRPLAYER2,92,70,170,14,ES_AUTOHSCROLL
+    LTEXT           "玩家1：",IDC_STATIC,35,26,34,11
+    LTEXT           "玩家2：",IDC_STATIC,36,73,29,8
+END
+
+IDD_AGAIN DIALOGEX 0, 0, 157, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "是",IDOK,15,34,50,14
+    PUSHBUTTON      "否",IDCANCEL,93,34,50,14
+    LTEXT           "再来一局？",IDC_STATIC,60,18,41,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -383,6 +377,22 @@ BEGIN
         RIGHTMARGIN, 163
         TOPMARGIN, 7
         BOTTOMMARGIN, 55
+    END
+
+    IDD_DOUBLEUSER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 292
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 115
+    END
+
+    IDD_AGAIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 150
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
     END
 END
 #endif    // APSTUDIO_INVOKED

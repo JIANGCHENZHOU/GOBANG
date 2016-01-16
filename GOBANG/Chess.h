@@ -32,5 +32,6 @@ public:
 	int GetTopStack();
 	CPoint* GetChessStack();
 	CPoint GetStackOfTopElem();
+	void EmptyChess();
 };
 

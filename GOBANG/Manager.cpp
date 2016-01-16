@@ -6,9 +6,13 @@ Manager::Manager()
 }
 
 Manager::Manager(CRect rect)
+	: sPlayer1(_T(""))
+	, sPlayer2(_T(""))
+	, numOfWin1(0)
+	, numOfWin2(0)
 {
 	this->rect = rect;
-	gameStatus = 2;
+	gameStatus = -1;
 	player = 0;
 	chess = Chess(rect);
 }
@@ -23,7 +27,7 @@ CRect Manager::GetPos(double mouseX, double mouseY)
 {
 	int numY = GetNum(mouseX,1);
 	
-	if (numY == -1)
+	if (numY == -1)//±ß½çÍâ
 		return CRect(0,0,0,0);
 	
 	int numX = GetNum(mouseY,0);
@@ -215,3 +219,77 @@ int Manager::GetGameStatus()
 	return gameStatus;
 }
 
+
+
+void Manager::SetGameStatus(int gameStatus)
+{
+	this->gameStatus = gameStatus;
+}
+
+
+void Manager::EmptyChess()
+{
+	player = 0;
+	chess.EmptyChess();
+}
+
+
+bool Manager::PopChess(CPoint& xy, int& player)
+{
+	return chess.PoPChess(xy, player);
+}
+
+
+bool Manager::PushChess(CPoint& xy, int& player)
+{
+	return chess.PushChess(xy, player);
+}
+
+
+void Manager::SetPlayer1(CString sPlayer1)
+{
+	this->sPlayer1 = sPlayer1;
+}
+
+
+void Manager::SetPlayer2(CString sPlayer2)
+{
+	this->sPlayer2 = sPlayer2;
+}
+
+
+CString Manager::GetPlayer1Name()
+{
+	return sPlayer1;
+}
+
+
+CString Manager::GetPlayer2Name()
+{
+	return sPlayer2;
+}
+
+
+void Manager::InitManager()
+{
+	EmptyChess();
+	sPlayer1 = _T("");
+	sPlayer2 = _T("");
+	numOfWin1 = 0;
+	numOfWin2 = 0;
+	gameStatus = -1;
+}
+
+
+void Manager::SetNumOfWin(int player1, int player2)
+{
+	numOfWin1 = player1;
+	numOfWin2 = player2;
+}
+
+
+void Manager::GetNumOfWin(int& player1, int& player2)
+{
+	player1 = numOfWin1;
+	player2 = numOfWin2;
+}
